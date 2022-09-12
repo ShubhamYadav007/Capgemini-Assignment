@@ -1,0 +1,180 @@
+using System;
+using System.Linq.Expressions;
+using System.Runtime.Serialization;
+
+[Serializable]
+public class StackException : Exception
+{
+    public StackException() : base() { }
+    public StackException(string message) : base(message) { }
+    public StackException(string message, Exception innerException) : base(message, innerException) { }
+
+    public StackException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+
+}
+
+class MyStack : ICloneable
+{
+    int Size;
+    int[] arr;
+    int Top;
+
+    public MyStack(MyStack myStack)
+    {
+        Size = myStack.Size;
+        arr = myStack.arr;
+        Top = myStack.Top;
+    }
+    public object Clone()
+    {
+        return new MyStack(this);
+    }
+    public MyStack(int Size)
+    {
+        Top = -1;
+        this.Size = Size;
+        arr = new int[Size];
+    }
+
+    public void Push(int Element)
+    {
+        try
+        {
+            if (Top < arr.Length)
+            {
+                Top++;
+                arr[Top] = Element;
+
+
+            }
+            else
+            {
+                throw new StackException("Stack Overflow");
+            }
+        }
+        catch (StackException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+
+    }
+
+    public void Pop()
+    {
+
+        try
+        {
+            if (Top < 0)
+            {
+                throw new StackException("Stack underflow");
+            }
+            else
+            {
+
+                arr = arr.Where((source, index) => index != Top).ToArray();
+                Top--;
+            }
+        }
+        catch (StackException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        catch (IndexOutOfRangeException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+    }
+
+
+    public void Display()
+    {
+        foreach (int a in arr)
+        {
+            Console.WriteLine(a);
+        }
+    }
+
+}
+
+internal class Program
+{
+    public static void Main()
+    {
+        
+        Console.Write("Enter size of stack : ");
+        int sz = int.Parse(Console.ReadLine());
+        MyStack stack = new MyStack(sz);
+        bool flag = true;
+        do
+        {
+            Console.Write("Press 1.Push  2.Pop : ");
+            int operation = int.Parse(Console.ReadLine());
+            switch (operation)
+            {
+                case 1:
+                    Console.Write("Enter number to push : ");
+                    int pushElement = int.Parse(Console.ReadLine());
+                    
+                    break;
+
+                case 2:
+                   
+                    stack.Pop();
+                   
+                    break;
+            }
+
+            Console.Write("Do you wish to continue, YesNo : ");
+            string str = Console.ReadLine().ToUpper();
+
+            flag= ((str == "YES") ? true : false);
+
+        } while (flag != false);
+
+        MyStack ms1 = new MyStack(3);
+        Console.Write("Enter size of stack to be cloned : ");
+        int n = int.Parse(Console.ReadLine());
+        for (int i = 0; i < n; i++)
+        {
+            Console.Write("Enter"+ i + 1 +" values in stack to be cloned ");
+            int val = int.Parse(Console.ReadLine());
+            ms1.Push(val);
+        }
+
+        ms1.Print();
+        Console.WriteLine("");
+
+        MyStack ms2 = ms1.Clone();
+        ms2.Print();
+
+        Console.WriteLine("\n");
+
+        Console.Write("Please provide index number to edit value in stack array : ");
+        int ix = int.Parse(Console.ReadLine());
+        Console.Write("Please provide updated value  : ");
+        int value = int.Parse(Console.ReadLine());
+
+        ms1.ValueChange(ix, value);
+
+        ms1.Print();
+        Console.WriteLine("");
+
+        ms2.Print();
+
+    }
+}

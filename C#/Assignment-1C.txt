@@ -1,0 +1,28 @@
+3.	Write a static method to accept param array of integers. The method should find the sum of all the integers passed and display the result. Write a client program to call the method.
+
+using System;
+class HelloWorld {
+  
+  static void Main() {
+   
+   Console.WriteLine("Enter length of array");
+   int len=Convert.ToInt32(Console.ReadLine());
+   Console.WriteLine("Enter element of array");
+   int[] arr=new int[len];
+   for(int i=0;i<len;i++){
+       arr[i]=Convert.ToInt32(Console.ReadLine());
+   }
+   
+   Arr(arr);
+  }
+  
+  
+  public static void Arr(params int[] num){
+      int s=0;
+      for(int i=0;i<num.Length;i++){
+          s=s+num[i];
+      }
+      Console.WriteLine(s);
+  }
+}
+

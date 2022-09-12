@@ -1,0 +1,21 @@
+5.	Write a single method that calculates the area and circumference of the circle. The area and circumference should be displayed through the client code
+
+
+using System;
+class HelloWorld {
+    
+static void ar(int a){
+        
+        Console.WriteLine("Circumference " + 2*3.14*a);
+        Console.WriteLine("Area " + 2*3.14*a*a);
+    }
+    
+  static void Main() {
+      int a;
+     Console.WriteLine("Enter Radius of circle ");
+     a=Convert.ToInt32(Console.ReadLine());
+     ar(a);
+     
+    
+  }
+}
