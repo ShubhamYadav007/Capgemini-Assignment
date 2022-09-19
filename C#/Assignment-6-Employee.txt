@@ -1,0 +1,167 @@
+using System;
+
+
+
+public delegate void DisplayDelegate();
+abstract class Employee 
+{
+    public int EmpNo { get; set; }
+    public string EmpName { get; set; }
+    public double Salary { get; set; }
+    public double HRA;
+    public double TA;
+    public double DA;
+    public double PF;
+    public double TDS;
+
+    public double GrossSalary, NetSalary = 0;
+    // public Employee() { }
+    public Employee(int empNo, string empName, double salary)
+    {
+        EmpNo = empNo;
+        EmpName = empName;
+        Salary = salary;
+    }
+
+    public void GrossSal()
+    {
+        if (Salary < 5000)
+        {
+
+            HRA = 0.1 * Salary;
+            TA = 0.05 * Salary;
+            DA = 0.15 * Salary;
+            GrossSalary = Salary + HRA + TA + DA;
+
+        }
+        else if (Salary < 10000)
+        {
+            HRA = 0.15 * Salary;
+            TA = 0.1 * Salary;
+            DA = 0.2 * Salary;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary < 15000)
+        {
+            HRA = 0.2 * Salary;
+            TA = 0.15 * Salary;
+            DA = 0.25 * Salary;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else if (Salary < 20000)
+        {
+            HRA = 0.25 * Salary;
+            TA = 0.2 * Salary;
+            DA = 0.3 * Salary;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        else
+        {
+            HRA = 0.3 * Salary;
+            TA = 0.25 * Salary;
+            DA = 0.35 * Salary;
+            GrossSalary = Salary + HRA + TA + DA;
+        }
+        
+    }
+
+    public virtual void CalculateSalary()
+    {
+        PF = 0.1 * GrossSalary;
+        TDS = 0.18 * GrossSalary;
+
+        NetSalary = GrossSalary - (PF + TDS);
+        Console.WriteLine("Net Salary of Employee " + EmpName + " is " + Math.Round(NetSalary));
+    }
+   // public abstract void Print();
+
+}
+class Manager : Employee
+{
+    double PetrolAllowance { get; set; }
+    double FoodAllowance { get; set; }
+    double OtherAllowance { get; set; }
+    public Manager(int empNo, string empName, double salary) : base(empNo, empName, salary)
+    {
+        PetrolAllowance = 0.08 * Salary;
+        FoodAllowance = 0.13 * Salary;
+        OtherAllowance = 0.03 * Salary;
+
+    }
+
+    public new void GrossSal()
+    {
+        base.GrossSal();
+        GrossSalary = GrossSalary + PetrolAllowance + FoodAllowance + OtherAllowance;
+        Console.WriteLine("Gross Salary of Employee " + EmpName + " is " + Math.Round(GrossSalary));
+
+    }
+    public override void CalculateSalary()
+    {
+        base.GrossSal();
+        NetSalary = GrossSalary - ((10 * GrossSalary / 100) + (18 * GrossSalary / 100));
+        Console.WriteLine("Net Salary of Employee " + EmpName + " is " + Math.Round(NetSalary));
+
+    }
+
+    //public override void Print()
+    //{
+    //    Console.WriteLine("Employee ID " + EmpNo + " Employee Name " + EmpName + " Employee Salary " + Salary);
+    //}
+}
+class MarketingExecutive : Employee
+{
+    double KmTravel { get; set; }
+    double TourAllowances;
+
+    static double TelephoneAllowances = 1000;
+
+    public MarketingExecutive(int empNo, string empName, double salary, double KmTravel) : base(empNo, empName, salary)
+    {
+        this.KmTravel = KmTravel;
+        TourAllowances = KmTravel * 5;
+    }
+
+    public new void GrossSal()
+    {
+
+        base.GrossSal();
+        GrossSalary = GrossSalary + TourAllowances + TelephoneAllowances;
+        Console.WriteLine("Gross Salary of Employee " + EmpName + " is " + Math.Round(GrossSalary));
+
+    }
+    public override void CalculateSalary()
+    {
+        //base.GrossSal();
+        NetSalary = GrossSalary - ((10 * GrossSalary / 100) + (18 * GrossSalary / 100));
+        Console.WriteLine("Net Salary of Employee " + EmpName + " is " + Math.Round(NetSalary));
+
+    }
+    public void Display()
+    {
+        //CalculateSalary();
+        Console.WriteLine("Employee ID " + EmpNo + "\nEmployee Name " + EmpName + "\nEmployee Salary " + Salary);
+    }
+}
+
+public class LitwareLib
+{
+    public static void Main()
+    {
+
+        
+        MarketingExecutive m = new MarketingExecutive(111, "hello", 2000, 5);
+        DisplayDelegate d1 = new DisplayDelegate(m.Display);
+       // d1();
+
+        // Multicast delegate
+
+        DisplayDelegate d2 = new DisplayDelegate(m.GrossSal);
+        DisplayDelegate d3 = new DisplayDelegate(m.CalculateSalary);       
+
+        DisplayDelegate d5=d2+ d3+d1;
+
+        d5();
+
+    }
+}

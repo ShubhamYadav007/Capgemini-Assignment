@@ -1,0 +1,65 @@
+using System.Collections.Generic;
+using System.Globalization;
+
+public class Book
+{
+    public int BookNumber { get; set; }
+    public string BookName { get; set; }
+
+    public Book(int BookNumber, string bookName)
+    {
+        this.BookNumber = BookNumber;
+        BookName = bookName;
+    }
+}
+public class Program
+{
+    public static void Main()
+    {
+
+        // Create a Stack
+        Stack<Book> stackCustomers = new Stack<Book>();
+        bool t = true;
+
+        while (t)
+        {
+            Console.WriteLine("Choose 1.Push 2.Pop 3.Stop");
+            int sw = Convert.ToInt32(Console.ReadLine());
+            switch (sw)
+            {
+                case 1:
+                    Console.WriteLine("Number of Book you want to Keep in shelf");
+                    int e = Convert.ToInt32(Console.ReadLine());
+                    for (int i = 0; i < e; i++)
+                    {
+                        Console.WriteLine("Details of Book " + (i + 1));
+                        Console.WriteLine("Enter Book ID");
+                        int id = Convert.ToInt32(Console.ReadLine());
+                        Console.WriteLine("Enter Book Name");
+                        string name = Console.ReadLine();
+                        stackCustomers.Push(new Book(id, name));
+                        Console.WriteLine();
+
+                    }
+
+                    break;
+                case 2:
+                    Console.WriteLine("Taking Out all the books from the shelf");
+
+                    foreach (Book b in stackCustomers)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(b.BookName + " Book is removed with Book Number " + b.BookNumber);
+                        
+                    }
+                    break;
+                case 3:
+                    t= false;   
+                    break;
+
+            }
+            
+        }
+
+    }
+}

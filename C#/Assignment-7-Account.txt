@@ -1,0 +1,127 @@
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+public class TransactionEvent : EventArgs
+{
+    public double Balance { get; set; }
+    public double Amount { get; set; }
+
+}
+public class ICICIBank
+{
+    public static void TransactionUnderbalance(object sender, TransactionEvent e)
+    {
+        Console.WriteLine("Transaction cannot be continued below speified limit of Rs.-1000");
+    }
+    public static void BalanceCheck(object sender, TransactionEvent e)
+    {
+
+        Console.WriteLine("Your Balance is 0");
+
+    }
+}
+public class HDFCBank
+{
+
+    public static void TransactionUnderbalance(object sender, TransactionEvent e)
+    {
+        Console.WriteLine("Transaction cannot be continued as balance is insufficient in Account");
+    }
+    public static void BalanceCheck(object sender, TransactionEvent e)
+    {
+
+        Console.WriteLine("Your Balance is 0");
+
+    }
+
+}
+public class Account
+{
+
+    public int AccountNumber { get; set; }
+    public string CustomerName { get; set; }
+    public double Balance { get; set; }
+
+    public event EventHandler<TransactionEvent>? Underbalance;
+    public event EventHandler<TransactionEvent>? ZeroBalance;
+    public Account(int accountNumber, string customerName, double balance)
+    {
+        CustomerName = customerName;
+        AccountNumber = accountNumber;
+        Balance = balance;
+    }
+    public void SaveInfo()
+    {
+        using (StreamWriter w = File.AppendText(@"D:\cap\Customer.info"))
+        {
+            w.WriteLine($"Name= {CustomerName} ,Account Number= {AccountNumber} ,Balance= {Balance}");
+        }
+
+        
+    }
+    public static void ReadCustomerInfoFile()
+    {
+        StreamReader r = new StreamReader(@"D:\cap\Customer.info");
+        Console.WriteLine("Opening Customer Informaition Record File");
+        string ln;
+        while((ln=r.ReadLine()) != null)
+        {
+            Console.WriteLine(ln);
+        }
+        r.Close();
+    }
+    public void Withdraw(double amount)
+    {
+
+        TransactionEvent data = new TransactionEvent();
+        data.Amount = amount;
+        data.Balance = Balance;
+        //event
+        if ((Balance - amount) >= 1000)
+        {
+
+            Balance = Balance - amount;
+            Console.WriteLine("Balance remaining " + Balance);
+        }
+        else if (Balance == 0)
+        {
+            OnZeroBalance(data);
+        }
+        else
+        {
+            OnProcessCompleted(data);
+        }
+
+        // Console.WriteLine("Money is removed remaning blance is");
+
+    }
+    protected void OnProcessCompleted(TransactionEvent e)
+    {
+        Underbalance.Invoke(this, e);
+    }
+    protected void OnZeroBalance(TransactionEvent e)
+    {
+        ZeroBalance.Invoke(this, e);
+
+
+    }
+    public void Deposit(double amount)
+    {
+        Balance += amount;
+        Console.WriteLine("Money is deposited your blance is" + Balance);
+    }
+}
+class Bank
+{
+    public static void Main()
+    {
+        Account b1 = new Account(112, "Ram", 4000);
+        Account b2 = new Account(113, "John", 0);
+        b1.SaveInfo();
+        b2.SaveInfo();
+        Account.ReadCustomerInfoFile();
+
+
+    }
+}

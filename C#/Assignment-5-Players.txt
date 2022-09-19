@@ -1,0 +1,64 @@
+
+using System;
+using System.Collections;
+
+
+interface IEnumerable
+{
+    public IEnumerator GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+    public bool MoveNext()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Reset()
+    {
+        throw new NotImplementedException();
+    }
+    internal object StartsWith(string v)
+    {
+        throw new NotImplementedException();
+    }
+    
+}
+public class Player
+{
+    public string? Name { get; set; }   
+    public int Runs { get; set; }
+
+    public Player() { }
+    public Player(string Name, int Runs)
+    {
+      this.Name = Name;
+      this.Runs = Runs;
+    }
+
+    
+}
+
+class Team : IEnumerable
+{
+    public static void Main()
+    {
+        Player P1 = new Player();
+        P1.Name = "Ram";
+        P1.Runs = 2000;
+        Console.WriteLine("Enter Number of Player details you want to enter");
+        int n = Convert.ToInt32(Console.ReadLine());
+        Player[] India = new Player[n];
+        for (int i = 0; i < n; i++)
+        {
+            Console.WriteLine("Details of Player " + (i + 1));
+            Console.WriteLine("Enter Name of the player");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter Runs of the player");
+            int runs = Convert.ToInt32(Console.ReadLine());
+            India[i] = new Player(name, runs);
+            Console.WriteLine();
+        }
+
+    }
+}

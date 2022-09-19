@@ -1,0 +1,147 @@
+using System;
+using System.IO;
+
+public class FileHandling
+{
+    public static void CreateDirectory()
+    {
+        Console.WriteLine("Enter name of directory you want create");
+        string path = Console.ReadLine();
+        DirectoryInfo d1 = new DirectoryInfo(@"D:\cap\" + path);
+        if (!d1.Exists)
+        {
+            d1.Create();
+            {
+                Console.WriteLine("Directory Created");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Directory Exists");
+        }
+    }
+    public static void CreateFile()
+    {
+        Console.WriteLine("Enter name of the file you want to create");
+        string FileName = Console.ReadLine();
+        if (!File.Exists(@"D:\cap\" + FileName))
+        {
+            File.Create(@"D:\cap\" + FileName);
+        }
+        else
+        {
+            Console.WriteLine("File Exist with name"+FileName);
+        }
+
+    }
+    public static void ReadFile()
+    {
+        Console.WriteLine(@"Enter file Name in this directory= D:\cap\ you want to read");
+        string FileName = Console.ReadLine();
+        if (File.Exists(@"D:\cap\" + FileName))
+        {
+            Console.WriteLine("--------------------------");
+            StreamReader file = new StreamReader(@"D:\cap\" + FileName);
+
+            // int counter = 0;
+            string ln;
+            while ((ln = file.ReadLine()) != null)
+            {
+                Console.WriteLine(ln);
+                //counter++;
+            }
+            file.Close();
+            // Console.WriteLine($"File has {counter} lines.");
+            Console.WriteLine("--------------------------");
+
+        }
+        else
+        {
+            Console.WriteLine($"File with name {FileName} Does Not Exists");
+        }
+    }
+
+    public static void WriteInFile()
+    {
+        Console.WriteLine("Enter file name you want to write");
+        string FileName = Console.ReadLine();
+        if (!File.Exists(@"D:\cap\" + FileName))
+        {
+            using (StreamWriter writer = new StreamWriter(@"D:\cap\" + FileName))
+            {
+                Console.WriteLine("Start writing in the file--");
+                string ln=Console.ReadLine();
+                writer.WriteLine(ln);
+            }
+        }
+        else
+        {
+            using (StreamWriter writer = File.AppendText(@"D:\cap\" + FileName))
+            {
+                Console.WriteLine("Start writing in the file--");
+                string ln = Console.ReadLine();
+                writer.WriteLine(ln);
+            }
+        }
+       
+    }
+    public static void DeleteFile()
+    {
+        Console.WriteLine("Enter file name you want to write");
+        string FileName = Console.ReadLine();
+        if (File.Exists(@"D:\cap\" + FileName))
+        {
+            File.Delete(@"D:\cap\" + FileName);
+            Console.WriteLine($"{FileName} is Deleted successfully");
+        }
+        else
+        {
+            Console.WriteLine($"Sorry File {FileName} dosn't Exists");
+        }
+    }
+
+
+}
+class Program
+{
+    public static void Main()
+    {
+        bool value = true;
+        while (value)
+        {
+            Console.WriteLine();
+            Console.WriteLine("1.Create Directory 2.Create File 3.Read File 4.Write File 5.Delete File 6.Exit");
+            int choice = Convert.ToInt32(Console.ReadLine());
+            switch (choice)
+            {
+                case 1:
+
+                    FileHandling.CreateDirectory();
+                    break;
+                case 2:
+
+                    FileHandling.CreateFile();
+                    break;
+                case 3:
+
+                    FileHandling.ReadFile();
+                    break;
+                case 4:
+
+                    FileHandling.WriteInFile();
+                    break;
+                case 5:
+
+                    FileHandling.DeleteFile();
+                    break;
+                case 6:
+
+                    value=false;
+                    break;
+                default:
+                    Console.WriteLine("Enter valid input");
+                    break;
+            }
+        }
+    }
+}
